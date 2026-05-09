@@ -52,6 +52,11 @@ def main_pipeline():
     clean_data = transform_data(raw_data)
     send_alert(clean_data)
 
-# Execution
+# Execution & Scheduling (The Automator)
 if __name__ == "__main__":
-    main_pipeline()
+    # Cron "0 0 * * *" means: Run at Minute 0, Hour 0 (Midnight), Every day, Every month.
+    main_pipeline.serve(
+        name="Nightly_Executive_Sync",
+        cron="0 0 * * *", 
+        tags=["production", "market-data"]
+    )
